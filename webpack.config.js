@@ -1,4 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const devMode = process.env.NODE_ENV !== "production";
 const path = require('path');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -37,8 +39,9 @@ module.exports = {
 			},
 			{
 				test: /\.css$/,
+				include: path.resolve(__dirname, 'src'),
 				use: [
-                    require.resolve('style-loader'),
+					devMode ? "style-loader" : MiniCssExtractPlugin.loader,
                     require.resolve('css-loader'),
                     require.resolve('postcss-loader'),
                 ],
@@ -58,8 +61,8 @@ module.exports = {
 			filename: '[name].css'
 		}),
 		new HtmlWebpackPlugin({
-            title: 'Portfolio',
-            template: path.resolve(__dirname, './src/index.html'),
+            title: 'Svelte',
+            template: path.resolve(__dirname, 'src/index.html'),
         }),
 	],
 	devtool: prod ? false : 'source-map',
