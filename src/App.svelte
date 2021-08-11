@@ -1,22 +1,39 @@
 <script>
+	let button = { status: false };
+	import Overview from "./components/overview.svelte";
 	export let name;
+
+	const nd = {
+		number: "44",
+		description: "the value is",
+	};
+
+	function toggle() {
+		button.status = !button.status;
+	}
 </script>
 
 <main>
-	<h1 class="text-red-500 text-6xl mb-5">Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+	<div class="container mx-auto flex flex-col justify-center gap-y-4">
+		<h1 class="text-red-500 text-6xl">Hello {name}!</h1>
+		<Overview {...nd} />
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
+		<div>
+			{#if button.status}
+				<button
+					class="bg-blue-500 text-white px-6 py-2"
+					on:click={toggle}
+				>
+					activate
+				</button>
+			{:else}
+				<button
+					class="bg-red-500 text-white px-6 py-2"
+					on:click={toggle}
+				>
+					de-activate
+				</button>
+			{/if}
+		</div>
+	</div>
+</main>

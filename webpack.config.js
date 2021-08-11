@@ -52,7 +52,17 @@ module.exports = {
 				resolve: {
 					fullySpecified: false
 				}
-			}
+			},
+			{
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+                include: path.resolve(__dirname, 'src/images'),
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                include: path.resolve(__dirname, 'src/fonts'),
+                type: 'asset/resource',
+            },
 		]
 	},
 	mode,
