@@ -1,6 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const devMode = process.env.NODE_ENV !== "production";
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 const { extendDefaultPlugins } = require("svgo");
 const path = require('path');
@@ -44,7 +43,7 @@ module.exports = {
 				test: /\.css$/,
 				include: path.resolve(__dirname, 'src'),
 				use: [
-					devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+					!prod ? "style-loader" : MiniCssExtractPlugin.loader,
                     require.resolve('css-loader'),
                     require.resolve('postcss-loader'),
                 ],
@@ -60,12 +59,15 @@ module.exports = {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
                 include: path.resolve(__dirname, 'src/images'),
-				use: {
+				use: [
+					prod ? 
+					{
                     loader: require.resolve('webpack-image-resize-loader'),
                     options: {
                         width: 1200,
                     },
-                },
+				} : false,
+			].filter(Boolean),
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
@@ -83,14 +85,14 @@ module.exports = {
             title: 'Svelte',
             template: path.resolve(__dirname, 'src/index.html'),
         }),
-		new ImageMinimizerPlugin({
+		prod ? new ImageMinimizerPlugin({
 			minimizerOptions: {
 			  // Lossless optimization with custom option
 			  // Feel free to experiment with options for better result for you
 			  plugins: [
 				["gifsicle", { interlaced: true }],
 				["jpegtran", { progressive: true }],
-				["optipng", { optimizationLevel: 5 }],
+				["optipng", { optimizationLevel: 7 }],
 				// Svgo configuration here https://github.com/svg/svgo#configuration
 				[
 				  "svgo",
@@ -111,8 +113,8 @@ module.exports = {
 				],
 			  ],
 			},
-		  }),
-	],
+		  }) : false,
+	].filter(Boolean),
 	devtool: prod ? false : 'source-map',
 	devServer: {
 		hot: true
