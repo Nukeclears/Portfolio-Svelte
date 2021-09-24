@@ -16,7 +16,7 @@
     <div class="flex-none hidden lg:block">
         <ul class="menu horizontal">
             <li>
-                <a href="#/dist/">Home</a>
+                <a href="/">Home</a>
             </li>
             <li>
                 <a href="#/dist/Products">Products</a>
