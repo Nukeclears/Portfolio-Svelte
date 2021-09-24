@@ -45,8 +45,12 @@
                     {/each}
                 </div>
             </div>
-            <p v-if="onSale" class="alert alert-success">On sale!</p>
-            <div v-else class="h-[56px]" />
+            {#if variants[internalIndex].variantSale}
+                <p class="alert alert-success">On sale!</p>
+            {:else}
+                <div v-else class="h-[56px]" />
+            {/if}
+            
             <div class="card-actions flex-col">
                 <div>
                     <p class="badge" 

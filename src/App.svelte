@@ -15,9 +15,9 @@
     <MenuContent/>
     <div class="flex-1">
       <Router routes={{
-        '/': Home,
-        '/Products': Products,
-        '/Cart' : Cart,
+        '/dist/': Home,
+        '/dist/Products': Products,
+        '/dist/Cart' : Cart,
       }} />
     </div>
     <Footer />

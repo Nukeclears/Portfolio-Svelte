@@ -1,107 +1,58 @@
 <script>
-    import ProductCard from '../components/productCard.svelte';
-    import { cartArray, variantIndex } from '../stores/stores';
+    //components
+    import ProductCard from '../components/productCard.svelte'
 
-    let ItemIndex;
+    //stores
+    import { cartArray, variantIndex } from '../stores/stores'
+    import { Productitems, Filtering } from '../stores/products'
 
-    const unsubscribe = variantIndex.subscribe(value => {
-		ItemIndex = value;
-	});
+    let InclusiveFilter = true
 
     const handleClick = (brand, product, variants) => {
-        $cartArray = [...$cartArray, {
-            brand: brand,
-            product: product,
-            variants: variants[ItemIndex],
-        }];
-	}
+        variantIndex.subscribe((value) => {
+            $cartArray = [
+                ...$cartArray,
+                {
+                    brand: brand,
+                    product: product,
+                    variants: variants[value],
+                },
+            ]
+        })
+    }
 
-    let Productitems = [
-        {
-            brand: 'Vue',
-            product: 'test',
-            productType: ['Vue', 'socks'],
-            variants: [
-                {
-                    variantId: 2234,
-                    variantColor: 'green',
-                    variantImage: require('../images/socks-green.png'),
-                    variantSale: true,
-                    variantQuantity: 12,
-                },
-                {
-                    variantId: 2235,
-                    variantColor: 'blue',
-                    variantImage: require('../images/socks-blue.png'),
-                    variantSale: false,
-                    variantQuantity: 1,
-                },
-            ],
-        },
-        {
-            brand: 'Vue',
-            product: 'Smocks',
-            productType: ['Vue', 'socks'],
-            variants: [
-                {
-                    variantId: 2235,
-                    variantColor: 'blue',
-                    variantImage: require('../images/socks-blue.png'),
-                    variantSale: false,
-                    variantQuantity: 1,
-                },
-                {
-                    variantId: 2234,
-                    variantColor: 'green',
-                    variantImage: require('../images/socks-green.png'),
-                    variantSale: false,
-                    variantQuantity: 0,
-                },
-            ],
-        },
-        {
-            brand: 'Thomas',
-            product: 'Hat',
-            productType: ['Thomas', 'hat'],
-            variants: [
-                {
-                    variantId: 2145,
-                    variantColor: 'Blue',
-                    variantImage: require('../images/hat-blue.jpg'),
-                    variantSale: false,
-                    variantQuantity: 0,
-                },
-                {
-                    variantId: 6421,
-                    variantColor: 'Pink',
-                    variantImage: require('../images/hat-pink.png'),
-                    variantSale: true,
-                    variantQuantity: 99,
-                },
-            ],
-        },
-        {
-            brand: 'Smeckel',
-            product: 'Deluxe hat',
-            productType: ['Smeckel', 'hat'],
-            variants: [
-                {
-                    variantId: 6421,
-                    variantColor: 'Pink',
-                    variantImage: require('../images/hat-pink.png'),
-                    variantSale: true,
-                    variantQuantity: 99,
-                },
-                {
-                    variantId: 2145,
-                    variantColor: 'Blue',
-                    variantImage: require('../images/hat-blue.jpg'),
-                    variantSale: false,
-                    variantQuantity: 3,
-                },
-            ],
-        },
-    ]
+    $: filterItems = () => {
+        if (InclusiveFilter) {
+            var Filters = []
+            var productList = []
+            Filtering.forEach((option) => {
+                if (option.selected) {
+                    Filters.push(option.value)
+                }
+            })
+            if (Filters == false) {
+                return Productitems
+            } else {
+                Productitems.forEach((product) => {
+                    var myproduct = product.productType.some((e) => Filters.includes(e))
+                    if (myproduct) {
+                        productList.push(product)
+                    }
+                })
+                return productList
+            }
+        } else {
+            var productTypeItems = Productitems
+            Filtering.forEach((option) => {
+                if (option.selected) {
+                    productTypeItems = Object.values(productTypeItems).filter((item) =>
+                        item.productType.includes(option.value)
+                    )
+                }
+            })
+            return productTypeItems
+        }
+    }
 </script>
 
 <div class="container px-5 md:px-0">
@@ -112,18 +63,25 @@
                     <li>
                         <h2 class="text-xl mb-4">Filters</h2>
                     </li>
-                    <li>
-                        <label class="cursor-pointer label">
-                            <span class="label-text text-lg">item text</span>
-                            <input type="checkbox" class="checkbox" />
-                        </label>
-                    </li>
+                    {#each Filtering as filter}
+                        <li>
+                            <label class="cursor-pointer label">
+                                <span class="label-text text-lg">{filter.text}</span>
+                                <input
+                                    on:click={filterItems}
+                                    type="checkbox"
+                                    class="checkbox"
+                                    bind:checked={filter.selected}
+                                />
+                            </label>
+                        </li>
+                    {/each}
                 </ul>
                 <div class="p-6 card bordered">
                     <div class="form-control">
                         <label class="cursor-pointer label">
                             <span class="label-text">Inclusive</span>
-                            <input type="checkbox" class="toggle" />
+                            <input type="checkbox" class="toggle" bind:checked={InclusiveFilter} />
                         </label>
                     </div>
                 </div>
@@ -131,14 +89,13 @@
         </div>
         <div class="flex flex-col items-center gap-y-10 col-span-12 lg:col-span-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-9">
-                {#each Productitems as product}
+                {#each filterItems() as product}
                     <ProductCard
                         brand={product.brand}
                         product={product.product}
                         productType={product.productType}
                         variants={product.variants}
                         on:click={() => handleClick(product.brand, product.product, product.variants)}
-                        
                     />
                 {/each}
             </div>
