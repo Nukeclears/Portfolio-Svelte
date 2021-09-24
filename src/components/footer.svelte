@@ -1,30 +1,36 @@
-<script>
-    export let logoname;
-    export let mail;
-</script>
-
-<div>
-    <div class="bg-gradient-to-r from-cyan-200 dark:from-red-500 to-cyan-400 dark:to-pink-400 bg-opacity-70">
-        <div class="px-7 lg:px14 bg-gray-1000 bg-opacity-10">
-            <div class="flex flex-col">
-                <div class="container self-center py-3">
-                    <div class="flex justify-between">
-                        <div class="flex flex-col text-black dark:text-white">
-                            <div class="h-0.5 lg:h-1 bg-red-500 dark:bg-cyan-400 mb-3 transition-colors duration-500 w-full"></div>
-                            <p
-                                class="text-xl lg:text-xl font-display font-black uppercase leading-none lg:-mb-1 -mt-1 lg:-mt-3">
-                                {logoname}
-                            </p>
-                        </div>
-                        <div class="flex flex-col text-right text-black dark:text-white">
-                            <a href="mailto:{mail}" class="text-sm lg:text-base font-display font-semibold">
-                                {mail}
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+<footer class="items-center p-4 footer bg-neutral text-neutral-content">
+    <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path
+                d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+            />
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+            />
+        </svg>
+        <p>Thomas Vue playground</p>
     </div>
-</div>
+    <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+        <p>Vue / Webpack / TailwindCSS / DaisyUI</p>
+        <a href="https://github.com/nukeclears">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+            </svg>
+        </a>
+    </div>
+</footer>

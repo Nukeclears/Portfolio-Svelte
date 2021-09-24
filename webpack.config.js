@@ -1,7 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const { extendDefaultPlugins } = require("svgo");
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const path = require('path');
 
 const mode = process.env.NODE_ENV || 'development';
@@ -9,7 +8,7 @@ const prod = mode === 'production';
 
 module.exports = {
 	entry: {
-		'build/bundle': ['./src/main.js']
+		'main': ['./src/main.js']
 	},
 	resolve: {
 		alias: {
@@ -20,8 +19,8 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, '/docs'),
-		filename: '[name].js',
-		chunkFilename: '[name].[id].js',
+		filename: '[name].[contenthash].js',
+		chunkFilename: '[name].[contenthash].js',
 		clean: true
 	},
 	module: {
@@ -59,15 +58,6 @@ module.exports = {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
                 type: 'asset/resource',
                 include: path.resolve(__dirname, 'src/images'),
-				use: [
-					prod ? 
-					{
-                    loader: require.resolve('webpack-image-resize-loader'),
-                    options: {
-                        width: 1200,
-                    },
-				} : false,
-			].filter(Boolean),
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
@@ -85,36 +75,12 @@ module.exports = {
             title: 'Svelte',
             template: path.resolve(__dirname, 'src/index.html'),
         }),
-		prod ? new ImageMinimizerPlugin({
-			minimizerOptions: {
-			  // Lossless optimization with custom option
-			  // Feel free to experiment with options for better result for you
-			  plugins: [
-				["gifsicle", { interlaced: true }],
-				["jpegtran", { progressive: true }],
-				["optipng", { optimizationLevel: 7 }],
-				// Svgo configuration here https://github.com/svg/svgo#configuration
-				[
-				  "svgo",
-				  {
-					plugins: extendDefaultPlugins([
-					  {
-						name: "removeViewBox",
-						active: false,
-					  },
-					  {
-						name: "addAttributesToSVGElement",
-						params: {
-						  attributes: [{ xmlns: "http://www.w3.org/2000/svg" }],
-						},
-					  },
-					]),
-				  },
-				],
-			  ],
-			},
-		  }) : false,
-	].filter(Boolean),
+		new BrowserSyncPlugin({
+            host: 'localhost',
+            port: 3000,
+            proxy: "localhost:8080",
+        })
+	],
 	devtool: prod ? false : 'source-map',
 	devServer: {
 		hot: true
