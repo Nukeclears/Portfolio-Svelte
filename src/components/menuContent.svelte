@@ -1,6 +1,17 @@
+<script>
+		import { cartArray } from '../stores/stores';
+
+		let count_value;
+
+		const unsubscribe = cartArray.subscribe(value => {
+			count_value = value.length;
+		});
+</script>
+
 <div class="w-full navbar bg-base-300">
     <div class="flex-1 px-2 mx-2">
       <span> Thomas Vue playground </span>
+	  {count_value}
     </div>
     <div class="flex-none hidden lg:block">
       <ul class="menu horizontal">
@@ -16,7 +27,7 @@
           <router-link :to="route.path">
             <div class="mx-5">
               <a href="/#/Cart" class="indicator">
-                <div class="indicator-item badge badge-primary">CART</div>
+                <div class="indicator-item badge badge-primary">{count_value}</div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6"
