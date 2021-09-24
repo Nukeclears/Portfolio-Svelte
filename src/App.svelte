@@ -15,7 +15,7 @@
     <MenuContent/>
     <div class="flex-1">
       <Router routes={{
-        '/dist/': Home,
+        '*': Home,
         '/dist/Products': Products,
         '/dist/Cart' : Cart,
       }} />
