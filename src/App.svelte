@@ -20,7 +20,7 @@
         '/dist/Cart' : Cart,
       }} />
     </div>
-    <Footer />
   </div>
 </div>
 <Footer/>
+

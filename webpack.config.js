@@ -69,7 +69,7 @@ module.exports = {
 	mode,
 	plugins: [
 		new MiniCssExtractPlugin({
-			filename: '[name].css'
+			filename: '[name].[contenthash].css'
 		}),
 		new HtmlWebpackPlugin({
             title: 'Svelte',
