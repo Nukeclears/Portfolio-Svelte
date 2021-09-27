@@ -6,7 +6,43 @@
     import { cartArray, variantIndex } from '../stores/stores'
     import { Productitems, Filtering } from '../stores/products'
 
+    //variables
     let InclusiveFilter = true
+    let totalItems = Productitems.length
+    let currentPage = 1
+    let pageSize = 4
+
+    //pagination
+
+    const DecrementPage = () => {
+        if (currentPage > 1) {
+            currentPage --
+        }
+    }
+
+    const IncrementPage = () => {
+        if (currentPage < totalPages().totalPages) {
+            currentPage ++
+        }
+    }
+
+    const totalPages = () => {
+        let returner
+        let totalPages = Math.ceil(totalItems / pageSize)
+        var totalPagesArray = [...Array(totalPages).keys()]
+        returner = { totalPagesArray, totalPages }
+        return returner
+    }
+
+    $: Pagination = () => {
+        let PaginatedProductitems
+        let startIndex = (currentPage - 1) * pageSize
+        let endIndex = Math.min(startIndex + pageSize, totalItems);
+        PaginatedProductitems = filterItems().slice(startIndex, endIndex)
+        return PaginatedProductitems
+    }
+
+    //cart handler
 
     const handleClick = (brand, product, variants) => {
         variantIndex.subscribe((value) => {
@@ -21,10 +57,12 @@
         })
     }
 
+    //filter
+
     $: filterItems = () => {
         if (InclusiveFilter) {
-            var Filters = []
-            var productList = []
+            let Filters = []
+            let productList = []
             Filtering.forEach((option) => {
                 if (option.selected) {
                     Filters.push(option.value)
@@ -39,6 +77,7 @@
                         productList.push(product)
                     }
                 })
+                currentPage = 1
                 return productList
             }
         } else {
@@ -50,6 +89,7 @@
                     )
                 }
             })
+            currentPage = 1
             return productTypeItems
         }
     }
@@ -58,7 +98,7 @@
 <div class="container px-5 md:px-0">
     <div class="grid grid-cols-12 lg:gap-x-10 gap-y-10 py-10">
         <div class="col-span-12 lg:col-span-2">
-            <div class="flex flex-col">
+            <div class="flex flex-col gap-y-7">
                 <ul class="menu mb-2">
                     <li>
                         <h2 class="text-xl mb-4">Filters</h2>
@@ -85,11 +125,18 @@
                         </label>
                     </div>
                 </div>
+                <div class="btn-group">
+                    <button on:click="{DecrementPage}" class="btn">«</button> 
+                    {#each totalPages().totalPagesArray as page, i}
+                        <button class="btn" on:click="{() => currentPage = i + 1}" class:btn-active={currentPage - 1 == i}>{i + 1}</button>
+                    {/each}
+                    <button on:click="{IncrementPage}" class="btn">»</button>
+                </div>
             </div>
         </div>
         <div class="flex flex-col items-center gap-y-10 col-span-12 lg:col-span-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-9">
-                {#each filterItems() as product}
+                {#each Pagination() as product}
                     <ProductCard
                         brand={product.brand}
                         product={product.product}
@@ -98,16 +145,6 @@
                         on:click={() => handleClick(product.brand, product.product, product.variants)}
                     />
                 {/each}
-            </div>
-            <div>
-                <div class="btn-group">
-                    <button class="btn">Previous</button>
-                    <button class="btn btn-active">1</button>
-                    <button class="btn">2</button>
-                    <button class="btn">3</button>
-                    <button class="btn">4</button>
-                    <button class="btn">Next</button>
-                </div>
             </div>
         </div>
     </div>
