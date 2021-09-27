@@ -1,8 +1,11 @@
-export let Productitems = [
+declare function require(name: string): string
+
+export const Productitems = [
     {
         brand: 'Vue',
         product: 'test',
         productType: ['Vue', 'socks'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 2234,
@@ -24,6 +27,7 @@ export let Productitems = [
         brand: 'Vue',
         product: 'Smocks',
         productType: ['Vue', 'socks'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 2235,
@@ -45,6 +49,7 @@ export let Productitems = [
         brand: 'Thomas',
         product: 'Hat',
         productType: ['Thomas', 'hat'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 5212,
@@ -66,6 +71,7 @@ export let Productitems = [
         brand: 'Smeckel',
         product: 'Deluxe hat',
         productType: ['Smeckel', 'hat'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 6543,
@@ -87,6 +93,7 @@ export let Productitems = [
         brand: 'Thomas',
         product: 'Not a hat',
         productType: ['Thomas', 'hat'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 4563,
@@ -108,6 +115,7 @@ export let Productitems = [
         brand: 'Thomas',
         product: 'Perfect hat',
         productType: ['Thomas', 'hat'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 6423,
@@ -129,6 +137,7 @@ export let Productitems = [
         brand: 'Thomas',
         product: 'Imperfect hat',
         productType: ['Thomas', 'hat'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 6524,
@@ -150,6 +159,7 @@ export let Productitems = [
         brand: 'Vue',
         product: 'socky socks',
         productType: ['Vue', 'socks'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 2234,
@@ -171,6 +181,7 @@ export let Productitems = [
         brand: 'Vue',
         product: 'shmocks',
         productType: ['Vue', 'socks'],
+        variantIndex: 0,
         variants: [
             {
                 variantId: 2235,
@@ -190,7 +201,7 @@ export let Productitems = [
     },
 ]
 
-export let Filtering = [
+export const Filtering = [
     { text: 'Vue', value: 'Vue', selected: false },
     { text: 'Thomas', value: 'Thomas', selected: false },
     { text: 'Smeckel', value: 'Smeckel', selected: false },

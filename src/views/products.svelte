@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
+    import { get } from 'svelte/store'
     //components
     import ProductCard from '../components/productCard.svelte'
+
+    import { productItemTYPE } from '../types/productTPE'
 
     //stores
     import { cartArray, variantIndex } from '../stores/stores'
@@ -13,66 +16,69 @@
     let pageSize = 4
 
     //pagination
-
     const DecrementPage = () => {
         if (currentPage > 1) {
-            currentPage --
+            currentPage--
         }
     }
 
     const IncrementPage = () => {
         if (currentPage < totalPages().totalPages) {
-            currentPage ++
+            currentPage++
         }
     }
 
     const totalPages = () => {
-        let returner
+        let returner: {
+            totalPagesArray: Array<number>
+            totalPages: number
+        }
         let totalPages = Math.ceil(totalItems / pageSize)
         var totalPagesArray = [...Array(totalPages).keys()]
+
         returner = { totalPagesArray, totalPages }
+
         return returner
     }
 
     $: Pagination = () => {
-        let PaginatedProductitems
+        let PaginatedProductitems: Array<productItemTYPE>
         let startIndex = (currentPage - 1) * pageSize
-        let endIndex = Math.min(startIndex + pageSize, totalItems);
+        let endIndex = Math.min(startIndex + pageSize, totalItems)
         PaginatedProductitems = filterItems().slice(startIndex, endIndex)
         return PaginatedProductitems
     }
 
     //cart handler
-
-    const handleClick = (brand, product, variants) => {
-        variantIndex.subscribe((value) => {
-            $cartArray = [
-                ...$cartArray,
-                {
-                    brand: brand,
-                    product: product,
-                    variants: variants[value],
-                },
-            ]
-        })
+    const handleClick = (product: productItemTYPE) => {
+        $cartArray = [
+            ...$cartArray,
+            {
+                brand: product.brand,
+                product: product.product,
+                productType: product.productType,
+                variantIndex: get(variantIndex),
+                variants: product.variants
+            }
+        ]
     }
 
     //filter
-
     $: filterItems = () => {
         if (InclusiveFilter) {
-            let Filters = []
-            let productList = []
-            Filtering.forEach((option) => {
+            let Filters: Array<string> = []
+            let productList: Array<productItemTYPE> = []
+
+            Filtering.forEach(option => {
                 if (option.selected) {
                     Filters.push(option.value)
                 }
             })
-            if (Filters == false) {
+            if (Filters.length == 0) {
                 return Productitems
             } else {
-                Productitems.forEach((product) => {
-                    var myproduct = product.productType.some((e) => Filters.includes(e))
+                Productitems.forEach(product => {
+                    var myproduct = product.productType.some(e => Filters.includes(e))
                     if (myproduct) {
                         productList.push(product)
                     }
@@ -82,9 +88,9 @@
             }
         } else {
             var productTypeItems = Productitems
-            Filtering.forEach((option) => {
+            Filtering.forEach(option => {
                 if (option.selected) {
-                    productTypeItems = Object.values(productTypeItems).filter((item) =>
+                    productTypeItems = Object.values(productTypeItems).filter(item =>
                         item.productType.includes(option.value)
                     )
                 }
@@ -126,24 +132,22 @@
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button on:click="{DecrementPage}" class="btn">«</button> 
+                    <button on:click={DecrementPage} class="btn px-0 flex-1">«</button>
                     {#each totalPages().totalPagesArray as page, i}
-                        <button class="btn" on:click="{() => currentPage = i + 1}" class:btn-active={currentPage - 1 == i}>{i + 1}</button>
+                        <button
+                            class="btn px-0 flex-1"
+                            on:click={() => (currentPage = i + 1)}
+                            class:btn-active={currentPage - 1 == i}>{i + 1}</button
+                        >
                     {/each}
-                    <button on:click="{IncrementPage}" class="btn">»</button>
+                    <button on:click={IncrementPage} class="btn px-0 flex-1">»</button>
                 </div>
             </div>
         </div>
         <div class="flex flex-col items-center gap-y-10 col-span-12 lg:col-span-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-9">
                 {#each Pagination() as product}
-                    <ProductCard
-                        brand={product.brand}
-                        product={product.product}
-                        productType={product.productType}
-                        variants={product.variants}
-                        on:click={() => handleClick(product.brand, product.product, product.variants)}
-                    />
+                    <ProductCard {product} on:click={() => handleClick(product)} />
                 {/each}
             </div>
         </div>

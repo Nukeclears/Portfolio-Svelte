@@ -1,7 +1,12 @@
-<script>
+<script lang="ts">
+    //data store
     import { cartArray } from '../stores/stores'
 
-    let cartContent = Array
+    //types
+    import { productItemTYPE } from '../types/productTPE';
+
+    //cart
+    let cartContent: Array<productItemTYPE>
 
     const unsubscribe = cartArray.subscribe((value) => {
         cartContent = value
@@ -10,6 +15,7 @@
     const clearCart = () => {
         $cartArray = []
     }
+
 </script>
 
 <div>
@@ -52,7 +58,7 @@
                                         <div class="avatar">
                                             <div class="w-12 h-12 mask mask-squircle">
                                                 <img
-                                                    src={item.variants.variantImage}
+                                                    src={item.variants[item.variantIndex].variantImage}
                                                     alt="Avatar Tailwind CSS Component"
                                                 />
                                             </div>
@@ -63,7 +69,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{item.variants.variantColor}</td>
+                                <td>{item.variants[item.variantIndex].variantColor}</td>
                                 <th>
                                     <button class="btn btn-ghost btn-xs">details</button>
                                 </th>
