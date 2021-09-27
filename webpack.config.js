@@ -79,6 +79,7 @@ module.exports = {
             host: 'localhost',
             port: 3000,
             proxy: "localhost:8080",
+			open: false,
         })
 	],
 	devtool: prod ? false : 'source-map',
