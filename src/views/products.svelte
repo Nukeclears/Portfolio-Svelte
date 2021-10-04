@@ -3,7 +3,7 @@
     //components
     import ProductCard from '../components/productCard.svelte'
 
-    import { productItemTYPE } from '../types/productTPE'
+    import { productItemTYPE, productItemTYPES } from '../types/productTPE'
 
     //stores
     import { cartArray, variantIndex } from '../stores/stores'
@@ -41,14 +41,6 @@
         return returner
     }
 
-    $: Pagination = () => {
-        let PaginatedProductitems: Array<productItemTYPE>
-        let startIndex = (currentPage - 1) * pageSize
-        let endIndex = Math.min(startIndex + pageSize, totalItems)
-        PaginatedProductitems = filterItems().slice(startIndex, endIndex)
-        return PaginatedProductitems
-    }
-
     //cart handler
     const handleClick = (product: productItemTYPE) => {
         $cartArray = [
@@ -58,16 +50,24 @@
                 product: product.product,
                 productType: product.productType,
                 variantIndex: get(variantIndex),
-                variants: product.variants
+                variants: product.variants,
             }
         ]
+    }
+
+    $: Pagination = () => {
+        let PaginatedProductitems: productItemTYPES
+        let startIndex = (currentPage - 1) * pageSize
+        let endIndex = Math.min(startIndex + pageSize, totalItems)
+        PaginatedProductitems = filterItems().slice(startIndex, endIndex)
+        return PaginatedProductitems
     }
 
     //filter
     $: filterItems = () => {
         if (InclusiveFilter) {
             let Filters: Array<string> = []
-            let productList: Array<productItemTYPE> = []
+            let productList: productItemTYPES = []
 
             Filtering.forEach(option => {
                 if (option.selected) {
@@ -147,7 +147,7 @@
         <div class="flex flex-col items-center gap-y-10 col-span-12 lg:col-span-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-9">
                 {#each Pagination() as product}
-                    <ProductCard {product} on:click={() => handleClick(product)} />
+                    <ProductCard product={product} on:click={() => handleClick(product)} />
                 {/each}
             </div>
         </div>

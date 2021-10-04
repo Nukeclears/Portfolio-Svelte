@@ -1,10 +1,14 @@
+export type productItemTYPES = Array<productItemTYPE>
+
 export type productItemTYPE = {
     brand: string; 
     product: string; 
     productType: Array<string>; 
     variantIndex: number;
-    variants: Array<variantTYPE>;
+    variants: variantTYPES;
 }
+
+export type variantTYPES = Array<variantTYPE>;
 
 export type variantTYPE = {
     variantId: number,
@@ -13,3 +17,4 @@ export type variantTYPE = {
     variantSale: boolean,
     variantQuantity: number,
 }
+

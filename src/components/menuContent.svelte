@@ -11,7 +11,6 @@
 <div class="w-full navbar bg-base-300">
     <div class="flex-1 px-2 mx-2">
         <span> Thomas Vue playground </span>
-        {count_value}
     </div>
     <div class="flex-none hidden lg:block">
         <ul class="menu horizontal">
